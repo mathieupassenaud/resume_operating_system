@@ -1,0 +1,89 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+                0x0000000000100000                . = 0x100000
+
+.boot           0x0000000000100000        0x4
+ *(.boot)
+                0x0000000000100000        0x4 LONG 0x0
+                0x0000000000100004                _start_of_kernel = .
+
+.text           0x0000000000100010      0x221
+ *(.text)
+ .text          0x0000000000100010        0xc .obj/start.o
+                0x0000000000100010                main
+ *fill*         0x000000000010001c        0x4 00
+ .text          0x0000000000100020      0x1dc .obj/video.o
+                0x0000000000100020                cls
+                0x0000000000100047                affchar
+                0x0000000000100072                move_to_next_line
+                0x00000000001000dd                move_to_next_char
+                0x00000000001000f6                print
+                0x0000000000100166                iprint
+                0x00000000001001de                changecouleur
+                0x00000000001001e9                locate
+ .text          0x00000000001001fc       0x35 .obj/main.o
+                0x00000000001001fc                kernel_start
+
+.iplt           0x0000000000100240        0x0
+ .iplt          0x0000000000000000        0x0 .obj/start.o
+
+.rel.dyn        0x0000000000100234        0x0
+ .rel.iplt      0x0000000000000000        0x0 .obj/start.o
+ .rel.text      0x0000000000000000        0x0 .obj/start.o
+
+.rodata
+ *(.rodata)
+
+.rodata.str1.1  0x0000000000100231       0x22
+ .rodata.str1.1
+                0x0000000000100231        0x2 .obj/video.o
+ .rodata.str1.1
+                0x0000000000100233       0x20 .obj/main.o
+
+.eh_frame       0x0000000000100254       0xf4
+ .eh_frame      0x0000000000100254       0xe0 .obj/video.o
+ .eh_frame      0x0000000000100334       0x14 .obj/main.o
+                                         0x2c (size before relaxing)
+
+.data           0x0000000000101000        0x4
+ *(.data)
+ .data          0x0000000000101000        0x2 .obj/video.o
+ *fill*         0x0000000000101002        0x2 00
+ .data          0x0000000000101004        0x0 .obj/main.o
+                0x0000000000101004                _end_of_load = .
+
+.igot.plt       0x0000000000101004        0x0
+ .igot.plt      0x0000000000000000        0x0 .obj/start.o
+
+.bss            0x0000000000101020     0x4008
+                0x0000000000101020                _sbss = .
+ *(COMMON)
+ *(.bss)
+ .bss           0x0000000000101020     0x4000 .obj/start.o
+                0x0000000000101020                kernel_stack
+ .bss           0x0000000000105020        0x8 .obj/video.o
+ .bss           0x0000000000105028        0x0 .obj/main.o
+                0x0000000000105028                _ebss = .
+                0x0000000000105028                _end_of_kernel = .
+LOAD .obj/start.o
+LOAD .obj/video.o
+LOAD .obj/main.o
+OUTPUT(kernel.bin elf32-i386)
+
+.comment        0x0000000000000000       0x2a
+ .comment       0x0000000000000000       0x2a .obj/video.o
+                                         0x2b (size before relaxing)
+ .comment       0x0000000000000000       0x2b .obj/main.o
+
+.note.GNU-stack
+                0x0000000000000000        0x0
+ .note.GNU-stack
+                0x0000000000000000        0x0 .obj/video.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 .obj/main.o
