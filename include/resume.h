@@ -1,0 +1,2 @@
+void firstPart();
+void secondPart();

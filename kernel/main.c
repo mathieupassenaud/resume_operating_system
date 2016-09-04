@@ -1,16 +1,21 @@
-
-#include "types.h"
 #include "video.h"
+#include "keyboard.h"
+#include "resume.h"
+
+void buildFrame();
+void civil();
+void interests();
+void education();
 
 void kernel_start(unsigned long magic, unsigned long addr) {
-    changecouleur(BG_NOIR |CYAN);
-    print("Mon OS\n");
-        
-	changecouleur(BG_NOIR | BLANC);
-        
-    print("Entering Infinite loop\n");
-
-	
+	cls();
+	chg_color(BG_WHITE |CYAN);
+	print("Mon OS\n");
+	chg_color(BG_WHITE | BLACK);
+	firstPart();
+	getScancode();
+	secondPart();
 	while(1);
 }
+
 

@@ -1,89 +1,115 @@
 
-Memory Configuration
+Configuration mémoire
 
-Name             Origin             Length             Attributes
+Nom              Origine            Longueur           Attributs
 *default*        0x0000000000000000 0xffffffffffffffff
 
-Linker script and memory map
+Script de l'éditeurs de liens and table de projection mémoire
 
                 0x0000000000100000                . = 0x100000
 
-.boot           0x0000000000100000        0x4
- *(.boot)
-                0x0000000000100000        0x4 LONG 0x0
-                0x0000000000100004                _start_of_kernel = .
-
-.text           0x0000000000100010      0x221
+.text           0x0000000000100000      0x8dc
+ *(.multiboot)
+ .multiboot     0x0000000000100000        0xc .obj/start.o
  *(.text)
- .text          0x0000000000100010        0xc .obj/start.o
-                0x0000000000100010                main
- *fill*         0x000000000010001c        0x4 00
- .text          0x0000000000100020      0x1dc .obj/video.o
-                0x0000000000100020                cls
-                0x0000000000100047                affchar
-                0x0000000000100072                move_to_next_line
-                0x00000000001000dd                move_to_next_char
-                0x00000000001000f6                print
-                0x0000000000100166                iprint
-                0x00000000001001de                changecouleur
-                0x00000000001001e9                locate
- .text          0x00000000001001fc       0x35 .obj/main.o
-                0x00000000001001fc                kernel_start
+ *fill*         0x000000000010000c        0x4 
+ .text          0x0000000000100010        0xe .obj/start.o
+                0x0000000000100010                _start
+ .text          0x000000000010001e      0x1e2 .obj/video.o
+                0x000000000010001e                cls
+                0x0000000000100048                printchar
+                0x0000000000100076                move_to_next_line
+                0x00000000001000ec                move_to_next_char
+                0x0000000000100105                print
+                0x0000000000100168                iprint
+                0x00000000001001e2                chg_color
+                0x00000000001001ed                locate
+ .text          0x0000000000100200       0x15 .obj/keyboard.o
+                0x0000000000100200                getScancode
+ .text          0x0000000000100215      0x686 .obj/resume.o
+                0x0000000000100215                buildFrame
+                0x00000000001002e0                civil
+                0x000000000010035c                education
+                0x0000000000100510                interests
+                0x000000000010058d                firstPart
+                0x00000000001005ad                experiences
+                0x0000000000100865                secondPart
+ .text          0x000000000010089b       0x41 .obj/main.o
+                0x000000000010089b                kernel_start
 
-.iplt           0x0000000000100240        0x0
- .iplt          0x0000000000000000        0x0 .obj/start.o
+.iplt           0x00000000001008e0        0x0
+ .iplt          0x00000000001008e0        0x0 .obj/start.o
 
-.rel.dyn        0x0000000000100234        0x0
- .rel.iplt      0x0000000000000000        0x0 .obj/start.o
- .rel.text      0x0000000000000000        0x0 .obj/start.o
+.rel.dyn        0x00000000001008dc        0x0
+ .rel.iplt      0x00000000001008dc        0x0 .obj/start.o
+ .rel.text      0x00000000001008dc        0x0 .obj/start.o
 
 .rodata
  *(.rodata)
 
-.rodata.str1.1  0x0000000000100231       0x22
+.rodata.str1.1  0x00000000001008dc      0x1d2
  .rodata.str1.1
-                0x0000000000100231        0x2 .obj/video.o
+                0x00000000001008dc        0x2 .obj/video.o
  .rodata.str1.1
-                0x0000000000100233       0x20 .obj/main.o
+                0x00000000001008de      0x1c8 .obj/resume.o
+                                        0x1ca (taille avant relaxe)
+ .rodata.str1.1
+                0x0000000000100aa6        0x8 .obj/main.o
 
-.eh_frame       0x0000000000100254       0xf4
- .eh_frame      0x0000000000100254       0xe0 .obj/video.o
- .eh_frame      0x0000000000100334       0x14 .obj/main.o
-                                         0x2c (size before relaxing)
+.eh_frame       0x0000000000100ab0      0x394
+ .eh_frame      0x0000000000100ab0       0xf8 .obj/video.o
+ .eh_frame      0x0000000000100ba8       0x14 .obj/keyboard.o
+                                         0x2c (taille avant relaxe)
+ .eh_frame      0x0000000000100bbc      0x268 .obj/resume.o
+                                        0x280 (taille avant relaxe)
+ .eh_frame      0x0000000000100e24       0x20 .obj/main.o
+                                         0x38 (taille avant relaxe)
 
-.data           0x0000000000101000        0x4
+.rodata.str1.4  0x0000000000100e44      0x5ec
+ .rodata.str1.4
+                0x0000000000100e44      0x5ec .obj/resume.o
+                                        0x5eb (taille avant relaxe)
+
+.data           0x0000000000102000        0x2
  *(.data)
- .data          0x0000000000101000        0x2 .obj/video.o
- *fill*         0x0000000000101002        0x2 00
- .data          0x0000000000101004        0x0 .obj/main.o
-                0x0000000000101004                _end_of_load = .
+ .data          0x0000000000102000        0x2 .obj/video.o
+ .data          0x0000000000102002        0x0 .obj/keyboard.o
+ .data          0x0000000000102002        0x0 .obj/resume.o
+ .data          0x0000000000102002        0x0 .obj/main.o
 
-.igot.plt       0x0000000000101004        0x0
- .igot.plt      0x0000000000000000        0x0 .obj/start.o
+.igot.plt       0x0000000000102004        0x0
+ .igot.plt      0x0000000000102004        0x0 .obj/start.o
 
-.bss            0x0000000000101020     0x4008
-                0x0000000000101020                _sbss = .
+.bss            0x0000000000103000     0x4008
  *(COMMON)
  *(.bss)
- .bss           0x0000000000101020     0x4000 .obj/start.o
-                0x0000000000101020                kernel_stack
- .bss           0x0000000000105020        0x8 .obj/video.o
- .bss           0x0000000000105028        0x0 .obj/main.o
-                0x0000000000105028                _ebss = .
-                0x0000000000105028                _end_of_kernel = .
+ .bss           0x0000000000103000     0x4000 .obj/start.o
+                0x0000000000107000                stack_top
+ .bss           0x0000000000107000        0x8 .obj/video.o
+ .bss           0x0000000000107008        0x0 .obj/keyboard.o
+ .bss           0x0000000000107008        0x0 .obj/resume.o
+ .bss           0x0000000000107008        0x0 .obj/main.o
 LOAD .obj/start.o
 LOAD .obj/video.o
+LOAD .obj/keyboard.o
+LOAD .obj/resume.o
 LOAD .obj/main.o
 OUTPUT(kernel.bin elf32-i386)
 
-.comment        0x0000000000000000       0x2a
- .comment       0x0000000000000000       0x2a .obj/video.o
-                                         0x2b (size before relaxing)
- .comment       0x0000000000000000       0x2b .obj/main.o
+.comment        0x0000000000000000       0x1d
+ .comment       0x0000000000000000       0x1d .obj/video.o
+                                         0x1e (taille avant relaxe)
+ .comment       0x000000000000001d       0x1e .obj/keyboard.o
+ .comment       0x000000000000001d       0x1e .obj/resume.o
+ .comment       0x000000000000001d       0x1e .obj/main.o
 
 .note.GNU-stack
                 0x0000000000000000        0x0
  .note.GNU-stack
                 0x0000000000000000        0x0 .obj/video.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 .obj/keyboard.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 .obj/resume.o
  .note.GNU-stack
                 0x0000000000000000        0x0 .obj/main.o

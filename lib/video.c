@@ -1,5 +1,5 @@
 #include "video.h"
-#include "types.h"
+
 //
 // Constant
 //-----------------------------------------------
@@ -10,18 +10,18 @@
 // Structure to access directly to the video mem
 //-----------------------------------------------
 typedef struct {
-    unsigned char caractere;
+    unsigned char c;
     unsigned char attr;
 } __attribute__ ((packed)) video_mem[width*lines];
 
 // Make the structure point to the good address
 //-----------------------------------------------
-static volatile video_mem *ecran = (volatile video_mem *)start_video_mem;
+static volatile video_mem *screen = (volatile video_mem *)start_video_mem;
 
 // Global vars
 //-----------------------------------------------
 
-static short aff= BG_NOIR | BLANC;
+static short aff= BG_BLACK | WHITE;
 static int x, y = 0;
 
 //
@@ -32,18 +32,18 @@ void cls(){
 	long i;
 	
 	for(i=0;i<width*lines;++i){
-	    (*ecran)[i].caractere=0;
-	    (*ecran)[i].attr=aff;
+	    (*screen)[i].c=0;
+	    (*screen)[i].attr=aff;
 	}
 }
 
 //
 // affchar : Display character at current position
 //------------------------------------------------
-void affchar(char caractere){
+void printchar(char c){
         long offset = x+y*width;
-	(*ecran)[offset].caractere =caractere ;
-	(*ecran)[offset].attr = aff; 
+	(*screen)[offset].c =c ;
+	(*screen)[offset].attr = aff; 
 
 }
 
@@ -68,13 +68,13 @@ void move_to_next_line(){
         long i;
 	// Copy the screen one line before
       	for(i=0;i<width*(lines-1);++i){
-	    (*ecran)[i].caractere=(*ecran)[i+width].caractere;
-	    (*ecran)[i].attr=(*ecran)[i+width].attr;
+	    (*screen)[i].c=(*screen)[i+width].c;
+	    (*screen)[i].attr=(*screen)[i+width].attr;
 	}
 	// Empty last line
 	for(;i<width*lines;++i){
-	    (*ecran)[i].caractere=0;
-	    (*ecran)[i].attr=aff;
+	    (*screen)[i].c=0;
+	    (*screen)[i].attr=aff;
 	}
       }
 }
@@ -82,10 +82,10 @@ void move_to_next_line(){
 //
 // Print
 //------------------------------------------------
-void print(char* chaine){
-	char* pt; /* pointeur sur la chaine de caractere */
-	pt = chaine;
-	while(*pt!=0x0){ /* tant que le caractere est different de 0x0 */
+void print(char* str){
+	char* pt;
+	pt = str;
+	while(*pt!=0x0){
 	        if(*pt == '\n'){
 		   	move_to_next_line();   
 		}else if (*pt == '\t'){  
@@ -97,7 +97,7 @@ void print(char* chaine){
 		}else if (*pt == '\r'){
 			x=0;
 		}else{
-			affchar(*pt);
+			printchar(*pt);
 			move_to_next_char();
 		}		
 		pt++;
@@ -125,8 +125,8 @@ void iprint(int number){
 //
 // Modify the current attributes
 //------------------------------------------------
-void changecouleur(short couleur){
-		aff=couleur;
+void chg_color(short color){
+		aff=color;
 }
 //
 // locate on the screen
@@ -135,5 +135,4 @@ void locate(int h, int w){
 	x=h;
 	y=w;
 }
-
 
