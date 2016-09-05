@@ -76,7 +76,7 @@ void education() {
 
 	chg_color(BG_WHITE | BLACK);	
 	locate(3, 11);
-	print("Professional Degree - \"embedeed systems\"");
+	print("Professional Degree - \"embedded systems\"");
 	locate(12, 12);
 	chg_color(BG_WHITE | GRAY);
 	print("(2010) - University St Quentin / Yvelines");
@@ -133,7 +133,7 @@ void experiences() {
 
 	locate(0,0);
 	chg_color(BG_RED | WHITE);
-	print("Teevity - Cloud Developper");
+	print("Teevity - Cloud Developer");
 	locate(0,1);
 	chg_color(BG_WHITE | GRAY);
 	print("-------- 2010-2012 --------");
@@ -191,7 +191,7 @@ to insure a quality service.\n");
 	print("-------- 2015-2016 --------");
 	locate(0,20);
 	chg_color(BG_WHITE | BLACK);
-	print("A quiet interesting experience with S. Wallez (@bluxte). A fantastic engineering team built a PaaS Timeseries platform used for monitoring (Datacenters, Servers...)\n");
+	print("A quite interesting experience with S. Wallez (@bluxte). A fantastic engineering team built a PaaS Timeseries platform used for monitoring (Datacenters, Servers...)\n");
 	chg_color(BG_GRAY | BLACK);
 	print("		 Golang - REST API - Bash - PERL - Docker - Ansible");
 
